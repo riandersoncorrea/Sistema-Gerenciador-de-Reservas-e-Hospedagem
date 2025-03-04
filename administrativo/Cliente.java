@@ -4,6 +4,13 @@ public class Cliente {
     private String nome;
     private int cpf;
     private int telefone;
+
+    
+    public Cliente(String nome, int cpf, int telefone) {
+        this.nome = nome;
+        this.cpf = cpf;
+        this.telefone = telefone;
+    }
     
     public String getNome() {
         return nome;
