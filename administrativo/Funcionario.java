@@ -1,16 +1,17 @@
 package administrativo;
+import repositorio.RepositorioCliente;
 
 public class Funcionario {
     private int id;
     private String nome;
     private String cargo;
+    private RepositorioCliente clienteBd;
 
     public Funcionario(int id, String nome, String cargo) {
         this.id = id;
         this.nome = nome;
         this.cargo = cargo;
     }
-
 
     public int getId() {
         return id;
@@ -31,8 +32,18 @@ public class Funcionario {
         this.cargo = cargo;
     }
 
-    public void cadastrarCliente(Cliente cliente) {
+    public RepositorioCliente getClienteBd() {
+        return clienteBd;
+    }
 
+
+    public void setClienteBd(RepositorioCliente clienteBd) {
+        this.clienteBd = clienteBd;
+    }
+
+    public void cadastrarCliente(Cliente cliente) {
+        //devo chamar o metodo adicionarCliente() da classe RepositorioCliente?
+        
     }
 
     public void realizarCheckIn() {
@@ -46,4 +57,7 @@ public class Funcionario {
     public void gerarRelatorio() {
 
     }
+
+
+    
 }
