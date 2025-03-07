@@ -6,6 +6,7 @@ public abstract class Hospedagem implements Reservavel {
     private int idHospedagem;
     private int capacidade;
     private double precoPorDiaria;
+    private Reserva statusReserva;
 
     public Hospedagem(int idHospedagem, int capacidade) {
         this.idHospedagem = idHospedagem;
@@ -56,6 +57,8 @@ public abstract class Hospedagem implements Reservavel {
     public void reservar(Cliente cliente, Date dataCheckIn, Date dataCheckOut) {
         if (verificarDisponibilidade(dataCheckIn, dataCheckOut)){
             //... armazenar reserva no bd. Add reserva ao cliente/tipo reserva...
+            
+            
         }
         
     }

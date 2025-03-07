@@ -65,6 +65,10 @@ public class Reserva {
         //duvida: aqui só terá essa string alterando o status? e no cancelar reserva lá dos reservaveis que "exclui" a reserva do repositorio?
         setStatusReserva("cancelada");
     }
+
+    public void atualizarStatus(){
+        setStatusReserva("ativa");
+    }
     
 
     

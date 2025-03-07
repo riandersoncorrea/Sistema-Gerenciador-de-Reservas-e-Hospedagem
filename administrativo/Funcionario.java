@@ -1,18 +1,21 @@
 package administrativo;
 import repositorio.RepositorioCliente;
+import repositorio.RepositorioFuncionario;
 
 public class Funcionario {
     private int id;
     private String nome;
     private String cargo;
     private RepositorioCliente clienteBd;
+    private RepositorioFuncionario funcionarioBd;
     
     //Passar o repositório como dependência no construtor do Funcionario para que ele use sempre a mesma instância do RepositorioCliente.
-    public Funcionario(int id, String nome, String cargo, RepositorioCliente clienteBd) {
+    public Funcionario(int id, String nome, String cargo, RepositorioCliente clienteBd, RepositorioFuncionario funcionarioBd) {
         this.id = id;
         this.nome = nome;
         this.cargo = cargo;
         this.clienteBd = clienteBd;
+        this.funcionarioBd = funcionarioBd;
     }
 
     public int getId() {
@@ -49,6 +52,10 @@ public class Funcionario {
         
     }
 
+    public void cadastrarFuncionario(Funcionario funcionario) {
+        funcionarioBd.adicionarFuncionario(funcionario);
+    }
+
     public void realizarCheckIn() {
 
     }
@@ -61,6 +68,13 @@ public class Funcionario {
 
     }
 
-
+    @Override
+    public String toString() {
+        return "Funcionário {\n" +
+            "  Nome: " + nome + ",\n" +
+            "  Id: " + id + ",\n" +
+            "  Cargo: " + cargo + "\n" +
+            "}";
+    }
     
 }
