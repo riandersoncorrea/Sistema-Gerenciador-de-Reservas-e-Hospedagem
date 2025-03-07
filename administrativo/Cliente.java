@@ -5,13 +5,14 @@ public class Cliente {
     private int cpf;
     private int telefone;
 
-    
+    //construtor
     public Cliente(String nome, int cpf, int telefone) {
         this.nome = nome;
         this.cpf = cpf;
         this.telefone = telefone;
     }
     
+    //getters e setters
     public String getNome() {
         return nome;
     }
@@ -30,6 +31,16 @@ public class Cliente {
     public void setTelefone(int telefone) {
         this.telefone = telefone;
     }
+
+    @Override
+    public String toString() {
+        return "Cliente {\n" +
+            "  Nome: " + nome + ",\n" +
+            "  CPF: " + cpf + ",\n" +
+            "  Telefone: " + telefone + "\n" +
+            "}";
+    }
+
 
     
 }

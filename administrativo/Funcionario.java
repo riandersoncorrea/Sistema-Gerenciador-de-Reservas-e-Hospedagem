@@ -6,11 +6,13 @@ public class Funcionario {
     private String nome;
     private String cargo;
     private RepositorioCliente clienteBd;
-
-    public Funcionario(int id, String nome, String cargo) {
+    
+    //Passar o repositório como dependência no construtor do Funcionario para que ele use sempre a mesma instância do RepositorioCliente.
+    public Funcionario(int id, String nome, String cargo, RepositorioCliente clienteBd) {
         this.id = id;
         this.nome = nome;
         this.cargo = cargo;
+        this.clienteBd = clienteBd;
     }
 
     public int getId() {
@@ -41,8 +43,9 @@ public class Funcionario {
         this.clienteBd = clienteBd;
     }
 
+    //metodos
     public void cadastrarCliente(Cliente cliente) {
-        //devo chamar o metodo adicionarCliente() da classe RepositorioCliente?
+        clienteBd.adicionarCliente(cliente);
         
     }
 
