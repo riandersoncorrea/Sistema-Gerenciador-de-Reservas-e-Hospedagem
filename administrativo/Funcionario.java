@@ -10,12 +10,12 @@ public class Funcionario {
     private RepositorioFuncionario funcionarioBd;
     
     //Passar o repositório como dependência no construtor do Funcionario para que ele use sempre a mesma instância do RepositorioCliente.
-    public Funcionario(int id, String nome, String cargo, RepositorioCliente clienteBd, RepositorioFuncionario funcionarioBd) {
+    public Funcionario(int id, String nome, String cargo) {
         this.id = id;
         this.nome = nome;
         this.cargo = cargo;
-        this.clienteBd = clienteBd;
-        this.funcionarioBd = funcionarioBd;
+        this.clienteBd = RepositorioCliente.getInstance();
+        this.funcionarioBd = RepositorioFuncionario.getInstance();
     }
 
     public int getId() {
