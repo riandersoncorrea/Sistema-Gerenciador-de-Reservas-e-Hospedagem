@@ -17,10 +17,10 @@ public class Reserva {
     public Reserva(Cliente cliente, String idReservavel, Calendar dataCheckIn, Calendar dataCheckOut) {
         this.cliente = cliente;
         this.idReservavel = idReservavel;
-        this.itemReservado = ItemReservavel.QUARTO;
+        this.itemReservado = ItemReservavel.NENHUM;
         this.dataCheckIn = dataCheckIn;
         this.dataCheckOut = dataCheckOut;
-        this.status = StatusReserva.ATIVA;
+        this.status = StatusReserva.NENHUM;
     }
     
     public Cliente getCliente() {
@@ -76,13 +76,6 @@ public class Reserva {
         //altera o status da reserva para cancelada
         this.status = StatusReserva.CANCELADA;
         
-    }
-
-    public void atualizarStatus(){
-    
-    }
-    
-
-    
+    } 
 
 }

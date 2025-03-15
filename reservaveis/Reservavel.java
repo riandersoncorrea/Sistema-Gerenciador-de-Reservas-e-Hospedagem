@@ -9,5 +9,5 @@ public interface Reservavel {
 
     void reservar(Reserva reserva);
 
-    void cancelarReserva(Reserva reserva);
+    void cancelarReserva(Reserva reserva, String motivo);
 }

@@ -6,5 +6,6 @@ public enum ItemReservavel {
     QUARTO,
     PASSEIO,
     LAVANDERIA,
-    TRANSFER
+    TRANSFER,
+    NENHUM
 }

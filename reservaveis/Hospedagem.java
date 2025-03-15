@@ -1,5 +1,8 @@
 package reservaveis;
 import java.util.Calendar;
+
+import administrativo.Cliente;
+import repositorio.RepositorioCliente;
 import repositorio.RepositorioReservas;
 
 public abstract class Hospedagem implements Reservavel {
@@ -9,6 +12,7 @@ public abstract class Hospedagem implements Reservavel {
     
     
     RepositorioReservas repositorioReservas = RepositorioReservas.getInstance();
+    RepositorioCliente repositorioClientes = RepositorioCliente.getInstance();
 
 
     public String getIdHospedagem() {
@@ -66,28 +70,28 @@ public abstract class Hospedagem implements Reservavel {
     }
 
     //(DUVIDA) vai no checkin a logica desse metodo? e aqui só ficaria a chamada do checkin? ou o contrário?
+    
     @Override
     public void reservar(Reserva reserva) {
-
-        if (verificarDisponibilidade(reserva.getIdReservavel(), reserva.getDataCheckIn(), reserva.getDataCheckOut()) 
-                && reserva.getStatusReserva().equals(StatusReserva.ATIVA)){
-            //verifica o id informado na reserva e insere o tipo de reservavel no BD reserva.
+       
+     if (verificarDisponibilidade(reserva.getIdReservavel(), reserva.getDataCheckIn(), reserva.getDataCheckOut()) 
+         && !(reserva.getStatusReserva().equals(StatusReserva.ATIVA))){
+     //verifica o id informado na reserva e insere o tipo de reservavel no BD reserva.
             if(reserva.getIdReservavel().equals("001")){
-               reserva.setItemReservado(ItemReservavel.APARTAMENTO);
+            reserva.setItemReservado(ItemReservavel.APARTAMENTO);
             } else if (reserva.getIdReservavel().equals("002")) {
                 reserva.setItemReservado(ItemReservavel.CABANA);
             } else if (reserva.getIdReservavel().equals("003")){
                 reserva.setItemReservado(ItemReservavel.QUARTO);
             }
+            reserva.setStatusReserva(StatusReserva.ATIVA);
             repositorioReservas.adicionar(reserva); //armazena a reserva no repositorio
         } else {
-            System.out.println("Dia indisponivel"); // essa linha creio que não pode aqui
+            System.out.println("Dia indisponivel"); 
         }
-        
-    }
-
+    }   
      @Override
-    public void cancelarReserva(Reserva reserva) {
+    public void cancelarReserva(Reserva reserva, String motivo) {
         // ...
 
     }
