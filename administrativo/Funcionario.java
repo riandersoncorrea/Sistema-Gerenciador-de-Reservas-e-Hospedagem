@@ -3,14 +3,14 @@ import repositorio.RepositorioCliente;
 import repositorio.RepositorioFuncionario;
 
 public class Funcionario {
-    private int id;
+    private String id;
     private String nome;
     private String cargo;
     private RepositorioCliente clienteBd;
     private RepositorioFuncionario funcionarioBd;
     
     //Passar o repositório como dependência no construtor do Funcionario para que ele use sempre a mesma instância do RepositorioCliente.
-    public Funcionario(int id, String nome, String cargo) {
+    public Funcionario(String id, String nome, String cargo) {
         this.id = id;
         this.nome = nome;
         this.cargo = cargo;
@@ -18,10 +18,10 @@ public class Funcionario {
         this.funcionarioBd = RepositorioFuncionario.getInstance();
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
     public String getNome() {
@@ -41,27 +41,27 @@ public class Funcionario {
         return clienteBd;
     }
 
-
     public void setClienteBd(RepositorioCliente clienteBd) {
         this.clienteBd = clienteBd;
     }
 
     //metodos
     public void cadastrarCliente(Cliente cliente) {
-        clienteBd.adicionarCliente(cliente);
+        clienteBd.adicionar(cliente);
         
     }
 
     public void cadastrarFuncionario(Funcionario funcionario) {
-        funcionarioBd.adicionarFuncionario(funcionario);
+        funcionarioBd.adicionar(funcionario);
     }
 
+    
     public void realizarCheckIn() {
-
+        
     }
 
     public void realizarCheckOut() {
-         
+
     }
 
     public void gerarRelatorio() {

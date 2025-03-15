@@ -1,16 +1,13 @@
 package reservaveis;
 
-import java.util.Date;
-
-import administrativo.Cliente;
-
+import java.util.Calendar;
 
 public interface Reservavel {
 
 
-    boolean verificarDisponibilidade(Date dataCheckIn, Date dataCheckOut);
+    boolean verificarDisponibilidade(String idReservavel, Calendar dataCheckIn, Calendar dataCheckOut);
 
-    void reservar(Cliente cliente, Date dataCheckIn, Date dataCheckOut);
+    void reservar(Reserva reserva);
 
     void cancelarReserva(Reserva reserva);
 }

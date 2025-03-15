@@ -2,11 +2,11 @@ package administrativo;
 
 public class Cliente {
     private String nome;
-    private int cpf;
-    private int telefone;
+    private String cpf;
+    private String telefone;
 
     //construtor
-    public Cliente(String nome, int cpf, int telefone) {
+    public Cliente(String nome, String cpf, String telefone) {
         this.nome = nome;
         this.cpf = cpf;
         this.telefone = telefone;
@@ -19,16 +19,16 @@ public class Cliente {
     public void setNome(String nome) {
         this.nome = nome;
     }
-    public int getCpf() {
+    public String getCpf() {
         return cpf;
     }
-    public void setCpf(int cpf) {
+    public void setCpf(String cpf) {
         this.cpf = cpf;
     }
-    public int getTelefone() {
+    public String getTelefone() {
         return telefone;
     }
-    public void setTelefone(int telefone) {
+    public void setTelefone(String telefone) {
         this.telefone = telefone;
     }
 

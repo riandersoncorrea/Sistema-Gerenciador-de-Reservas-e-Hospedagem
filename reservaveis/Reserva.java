@@ -1,26 +1,28 @@
 package reservaveis;
 
 
-import java.util.Date;
+import java.util.Calendar;
 
 import administrativo.Cliente;
 
 public class Reserva {
     private Cliente cliente;
-    private Reservavel itemReservado;
-    private Date dataCheckIn;
-    private Date dataCheckOut;
-    private String statusReserva;
+    private String idReservavel;
+    private ItemReservavel itemReservado; // Enum para o tipo de hospedagem
+    private Calendar dataCheckIn;
+    private Calendar dataCheckOut;
+    private StatusReserva status; //é uma variável do tipo StatusReserva(Enum) com as opções do status
 
     //construtor
-    public Reserva(Cliente cliente, Reservavel itemReservado, Date dataCheckIn, Date dataCheckOut) {
+    public Reserva(Cliente cliente, String idReservavel, Calendar dataCheckIn, Calendar dataCheckOut) {
         this.cliente = cliente;
-        this.itemReservado = itemReservado;
+        this.idReservavel = idReservavel;
+        this.itemReservado = ItemReservavel.QUARTO;
         this.dataCheckIn = dataCheckIn;
         this.dataCheckOut = dataCheckOut;
-        this.statusReserva = "ativa";
+        this.status = StatusReserva.ATIVA;
     }
-
+    
     public Cliente getCliente() {
         return cliente;
     }
@@ -29,45 +31,55 @@ public class Reserva {
         this.cliente = cliente;
     }
 
-    public Reservavel getItemReservado() {
+    public ItemReservavel getItemReservado() {
         return itemReservado;
     }
 
-    public void setItemReservado(Reservavel itemReservado) {
+    public void setItemReservado(ItemReservavel itemReservado) {
         this.itemReservado = itemReservado;
     }
 
-    public Date getDataCheckIn() {
+    public Calendar getDataCheckIn() {
         return dataCheckIn;
     }
 
-    public void setDataCheckIn(Date dataCheckIn) {
+    public void setDataCheckIn(Calendar dataCheckIn) {
         this.dataCheckIn = dataCheckIn;
     }
 
-    public Date getDataCheckOut() {
+    public Calendar getDataCheckOut() {
         return dataCheckOut;
     }
 
-    public void setDataCheckOut(Date dataCheckOut) {
+    public void setDataCheckOut(Calendar dataCheckOut) {
         this.dataCheckOut = dataCheckOut;
     }
 
-    public String getStatusReserva() {
-        return statusReserva;
+    public StatusReserva getStatusReserva() {
+        return status;
     }
 
-    public void setStatusReserva(String statusReserva) {
-        this.statusReserva = statusReserva;
+    public void setStatusReserva(StatusReserva status) {
+        this.status = status;
     }
 
-    public void cancelarReserva (String statusReserva){
-        //duvida: aqui só terá essa string alterando o status? e no cancelar reserva lá dos reservaveis que "exclui" a reserva do repositorio?
-        setStatusReserva("cancelada");
+    
+    public String getIdReservavel() {
+        return idReservavel;
+    }
+
+    public void setIdReservavel(String idReservavel) {
+        this.idReservavel = idReservavel;
+    }
+
+    public void cancelarReserva (StatusReserva status){
+        //altera o status da reserva para cancelada
+        this.status = StatusReserva.CANCELADA;
+        
     }
 
     public void atualizarStatus(){
-        setStatusReserva("ativa");
+    
     }
     
 

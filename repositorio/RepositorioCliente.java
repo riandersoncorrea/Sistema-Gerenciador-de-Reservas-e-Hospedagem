@@ -5,7 +5,7 @@ import java.util.List;
 
 import administrativo.Cliente;
 
-public class RepositorioCliente {
+public class RepositorioCliente implements Repositorio<Cliente> {
     private List<Cliente> clientesBD; //cria uma lista para armazenar os clientes
     private static RepositorioCliente instancia; //atributo estatico para garantir o armazenamento de apenas uma instancia
 
@@ -24,20 +24,24 @@ public class RepositorioCliente {
 
     } 
     //adicionando o cliente no repositorio
-    public void adicionarCliente (Cliente cliente) {
+    @Override
+    public void adicionar (Cliente cliente) {
         clientesBD.add(cliente);
     }
 
-    public Cliente buscarCliente (int cpf){
+    //buscando o cliente no repositorio
+    @Override
+    public Cliente buscar (String cpf){
         for (Cliente cliente : clientesBD) {
-            if (cliente.getCpf() == cpf) {
+            if (cliente.getCpf().equals(cpf)) {
                 return cliente;
             }
         }
         return null;
     }
 
-    public List<Cliente> listarClientes() {
+    @Override
+    public List<Cliente> listar () {
         return new ArrayList<>(clientesBD);
     }
     

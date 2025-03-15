@@ -21,7 +21,7 @@ public abstract class ServicosAdicionais implements Reservavel {
     }
 
     @Override
-    public boolean verificarDisponibilidade(Date dataCheckIn, Date dataCheckOut) {
+    public boolean verificarDisponibilidade(int idReservavel, Date dataCheckIn, Date dataCheckOut) {
         // verificar no bd se esta disponivel 
         return false;
     }

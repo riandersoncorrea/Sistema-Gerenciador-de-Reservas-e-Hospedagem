@@ -4,8 +4,8 @@ import reservaveis.Hospedagem;
 
 public class Cabana extends Hospedagem {
 
-    public Cabana (int idHospedagem, int capacidade){
-        super(idHospedagem, capacidade);
+    public Cabana (String idHospedagem, int capacidade){
+        super();
     }
 
     @Override
