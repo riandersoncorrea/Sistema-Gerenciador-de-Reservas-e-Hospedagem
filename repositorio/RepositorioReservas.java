@@ -3,6 +3,7 @@ package repositorio;
 import java.util.ArrayList;
 import java.util.List;
 
+import Exceptions.ReservaNaoEncontradaException;
 import reservaveis.Reserva;
 
 public class RepositorioReservas implements Repositorio<Reserva>{
@@ -28,20 +29,19 @@ public class RepositorioReservas implements Repositorio<Reserva>{
     }
 
     @Override
-    public Reserva buscar(String id) {
-        // TODO Auto-generated method stub
+    public Reserva buscar(String id) throws ReservaNaoEncontradaException {
+        
         for (Reserva reserva : reservasBd){
-            //if (){
-               return reserva; 
-           // }
-            
+            if (reserva.getId() == Integer.parseInt(id)){
+                return reserva; 
+            } 
         }
-        return null;
+        
+        throw new ReservaNaoEncontradaException("Reserva não encontrada.");
     }
 
     @Override
     public List<Reserva> listar() {
-        // TODO Auto-generated method stub
         return new ArrayList<>(reservasBd);
     }
 

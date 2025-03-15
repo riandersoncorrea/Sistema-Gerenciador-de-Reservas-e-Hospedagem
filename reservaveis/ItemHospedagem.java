@@ -1,11 +1,8 @@
 package reservaveis;
 
-public enum ItemReservavel {
+public enum ItemHospedagem {
     APARTAMENTO,
     CABANA,
     QUARTO,
-    PASSEIO,
-    LAVANDERIA,
-    TRANSFER,
     NENHUM
 }

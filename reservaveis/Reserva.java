@@ -1,23 +1,30 @@
 package reservaveis;
 
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import administrativo.Cliente;
 
 public class Reserva {
     private Cliente cliente;
-    private String idReservavel;
-    private ItemReservavel itemReservado; // Enum para o tipo de hospedagem
+    private int id;
+    private String idHospedagem;
+    private String idServicosAdicionais;
+    private ItemHospedagem itemReservado; // Enum para o tipo de hospedagem
+    private ItemServicosAdicionais itemServicosAdicionais; //Enum para o tipo de servicos adicionais
     private Calendar dataCheckIn;
     private Calendar dataCheckOut;
     private StatusReserva status; //é uma variável do tipo StatusReserva(Enum) com as opções do status
 
     //construtor
-    public Reserva(Cliente cliente, String idReservavel, Calendar dataCheckIn, Calendar dataCheckOut) {
+    public Reserva(Cliente cliente, String idHospedagem, Calendar dataCheckIn, Calendar dataCheckOut) {
         this.cliente = cliente;
-        this.idReservavel = idReservavel;
-        this.itemReservado = ItemReservavel.NENHUM;
+        this.id = id;
+        this.idHospedagem = idHospedagem;
+        this.itemReservado = ItemHospedagem.NENHUM;
+        this.idServicosAdicionais = idServicosAdicionais;
+        this.itemServicosAdicionais = ItemServicosAdicionais.NENHUM;
         this.dataCheckIn = dataCheckIn;
         this.dataCheckOut = dataCheckOut;
         this.status = StatusReserva.NENHUM;
@@ -31,12 +38,30 @@ public class Reserva {
         this.cliente = cliente;
     }
 
-    public ItemReservavel getItemReservado() {
+    
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public ItemHospedagem getItemReservado() {
         return itemReservado;
     }
 
-    public void setItemReservado(ItemReservavel itemReservado) {
+    public void setItemReservado(ItemHospedagem itemReservado) {
         this.itemReservado = itemReservado;
+    }
+
+    
+    public String getIdServicosAdicionais() {
+        return idServicosAdicionais;
+    }
+
+    public void setIdServicosAdicionais(String idServicosAdicionais) {
+        this.idServicosAdicionais = idServicosAdicionais;
     }
 
     public Calendar getDataCheckIn() {
@@ -64,12 +89,20 @@ public class Reserva {
     }
 
     
-    public String getIdReservavel() {
-        return idReservavel;
+    public String getidHospedagem() {
+        return idHospedagem;
     }
 
-    public void setIdReservavel(String idReservavel) {
-        this.idReservavel = idReservavel;
+    public void setidHospedagem(String idHospedagem) {
+        this.idHospedagem = idHospedagem;
+    }
+
+    public ItemServicosAdicionais getItemServicosAdicionais() {
+        return itemServicosAdicionais;
+    }
+
+    public void setItemServicosAdicionais(ItemServicosAdicionais itemServicosAdicionais) {
+        this.itemServicosAdicionais = itemServicosAdicionais;
     }
 
     public void cancelarReserva (StatusReserva status){
@@ -78,4 +111,17 @@ public class Reserva {
         
     } 
 
+    @Override
+    public String toString() {
+        SimpleDateFormat formatarDataHora = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        return "Reservas {\n" +
+            "  ID Reserva: " + id + ",\n" +
+            "  Cliente: " + cliente + ",\n" +
+            "  Tipo Hospedagem: " + idHospedagem + " - " + itemReservado + "\n" +
+            "  Serviço Adicional: " + idServicosAdicionais + " - " + itemServicosAdicionais + "\n" +
+            "  Data Check-in: " +  formatarDataHora.format(dataCheckIn.getTime()) + "\n" +
+            "  Data Check-out: " + formatarDataHora.format(dataCheckOut.getTime()) + "\n" +
+            "  Status Reserva: " + status + "\n" +
+            "}";
+    }
 }

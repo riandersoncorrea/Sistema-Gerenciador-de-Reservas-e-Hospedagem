@@ -5,13 +5,17 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Scanner;
+
+import Exceptions.DataInvalidaException;
+import Exceptions.ReservaNaoEncontradaException;
 import administrativo.Cliente;
 import hospedagens.Apartamento;
 import repositorio.RepositorioCliente;
 import repositorio.RepositorioReservas;
 import reservaveis.Hospedagem;
 import reservaveis.Reserva;
-
+import reservaveis.ServicosAdicionais;
+import servicos.PasseiosTuristicos; 
 
 public class MenuDeOpcoes {
     
@@ -19,6 +23,8 @@ public class MenuDeOpcoes {
     RepositorioCliente repositorioCliente = RepositorioCliente.getInstance();
     RepositorioReservas repositorioReservas = RepositorioReservas.getInstance();
     Hospedagem hospedagem = new Apartamento();
+    ServicosAdicionais servicosAdicionais = new PasseiosTuristicos();
+    
 
     public void iniciarMenu (){
         int opcao;
@@ -45,39 +51,80 @@ public class MenuDeOpcoes {
                     break;
                 
                 case 4:
-                    boolean respostaSubopcaoCase4 = printReservaveis(Integer.parseInt(getString("opção: \n" + "[1] - Hospedagem \n" + "[2] - Serviços Adicionais\n" + "[0] - Voltar")));
+                    int respostaSubopcaoCase4 = printReservaveis(Integer.parseInt(getString("opção: \n" + "[1] - Hospedagem \n" + "[2] - Serviços Adicionais\n" + "[0] - Voltar")));
                     //verifica se não foi escolhido a opcao voltar
-                    if(respostaSubopcaoCase4){
+                    if(respostaSubopcaoCase4 == 1){
                         //busca cpf no repositório
                         String cpfCliente = getString("Cpf Cliente (000.000.000 - 00): ");
                         Cliente temCadastro = repositorioCliente.buscar(cpfCliente);
                         
-                         //verifica se o cliente possui cadastro
+                        //verifica se o cliente possui cadastro
                         if (temCadastro != null) {
-                            Reserva reserva = new Reserva(repositorioCliente.buscar(cpfCliente), getString("ID Reservavel: "),converterParaCalendar((getString("Data e Hora de Check-in (dd/MM/yyyy): "))), converterParaCalendar((getString("Data e Hora de Check-out (dd/MM/yyyy HH:mm): "))));
-                            hospedagem.reservar(reserva);
-                            System.out.println("Reserva realizada com sucesso.");
+                            //tratamento de execessão do formato da data
+                            try {
+                                Reserva reserva = new Reserva(repositorioCliente.buscar(cpfCliente), getString("ID Hospedagem: "),converterParaCalendar((getString("Data e Hora de Check-in (dd/MM/yyyy): "))), converterParaCalendar((getString("Data e Hora de Check-out (dd/MM/yyyy HH:mm): "))));
+
+                                //armazena o retorno do metodo reservar
+                                boolean reservaConcluida = hospedagem.reservar(reserva);
+                                if(reservaConcluida){
+                                    System.out.println("Reserva realizada com sucesso.");
+                                } else {
+                                    System.out.println("Dia indisponivel"); 
+                                }
+
+                            } catch (DataInvalidaException e){
+                                System.out.println(e.getMessage());
+                            }
                         } else {
                             //só permite fazer a reserva se ele já tiver um cadastro
-                        
                             System.out.println("Cpf sem cadastro. Por favor, realize o cadastro do cliente antes.");
                         }
-                    }
-                    break;
-                    
-                case 5:
-                    boolean respostaSubopcaoCase5 = printReservaveis(Integer.parseInt(getString("opção: \n" + "[1] - Hospedagem \n" + "[2] - Serviços Adicionais\n" + "[0] - Voltar")));
-
-                    if(respostaSubopcaoCase5){
-                        boolean disponibilidade = hospedagem.verificarDisponibilidade(getString("ID Hospedagem: "), converterParaCalendar(getString("Data e Hora de Check-in (dd/MM/yyyy): ")),converterParaCalendar((getString("Data e Hora de Check-out (dd/MM/yyyy HH:mm): "))));
-
-                        if(disponibilidade){
-                            System.out.println("Data disponível para reserva.");
-                        } else {
-                            System.out.println("Data Indisponível para reserva.");
+                        break;
+                    } else if (respostaSubopcaoCase4 == 2){
+                        try {
+                            String idReserva = getString("ID da Reserva: ");
+                            Reserva reservaEncontrada = repositorioReservas.buscar(idReserva);
+                            String idServico = getString("ID Serviço: ");
+                            reservaEncontrada.setIdServicosAdicionais(idServico); //atualiza o idServiço dentro da reserva encontrada
+                        
+                            //adicionar servico adicional na reserva
+                            boolean servicoConcluido = servicosAdicionais.reservar(reservaEncontrada);
+                            if (servicoConcluido){
+                                System.out.println("Serviço Adicioanl adicionado com sucesso.");
+                            }
+                            
+                        } catch (ReservaNaoEncontradaException e) {
+                            System.out.println(e.getMessage());
                         }
-                    }
+                        
+                    } 
                     break;
+                
+                case 5:
+                    int respostaSubopcaoCase5 = printReservaveis(Integer.parseInt(getString("opção: \n" + "[1] - Hospedagem \n" + "[2] - Serviços Adicionais\n" + "[0] - Voltar")));
+
+                    if(respostaSubopcaoCase5 == 1){
+
+                        try {
+                            boolean disponibilidade = hospedagem.verificarDisponibilidade(getString("ID Hospedagem: "), converterParaCalendar(getString("Data e Hora de Check-in (dd/MM/yyyy): ")),converterParaCalendar((getString("Data e Hora de Check-out (dd/MM/yyyy HH:mm): "))));
+
+                            if(disponibilidade){
+                                System.out.println("Data disponível para reserva.");
+                            } else {
+                                System.out.println("Data Indisponível para reserva.");
+                            }
+                        } catch (DataInvalidaException e){
+                            System.out.println(e.getMessage());
+                        }
+
+                    } else if (respostaSubopcaoCase5 == 2){
+                        //mostrar os servicos adicionais 
+                    }else {
+                      break;  
+                    }
+
+                case 6: 
+                    System.out.println(repositorioReservas.listar());
 
                 default:
                     break;
@@ -105,7 +152,7 @@ public class MenuDeOpcoes {
     }
 
    //imprime o menu de subopcoes com os IDs dos tipos de hospedagens e serviços adicionais, retorna boolean 
-   public boolean printReservaveis(int subopcao){
+   public int printReservaveis(int subopcao){
     
     switch (subopcao) {
         case 1: 
@@ -114,7 +161,7 @@ public class MenuDeOpcoes {
                               "001\t\t Apartamento\n" +
                               "002\t\t Cabana\n" +
                               "003\t\t Quarto\n");
-            return true;
+            return 1;
             
         case 2: 
             System.out.println("==============Opções de Serviços Adicionais==============\n" + 
@@ -122,12 +169,13 @@ public class MenuDeOpcoes {
                                 "111\t\t Passeios Turísticos\n" +
                                 "222\t\t Lavanderia\n" +
                                 "333\t\t Transfer\n");
-            return true;
+            
+            return 2;
         case 0:
             System.out.println("Voltando...");
-            return false;
+            return 0;
         default:
-            return false;
+            return 0;
     }
    }
 
@@ -161,7 +209,7 @@ public class MenuDeOpcoes {
     }
 
     // Recebe uma string como parâmetro e converte em data e hora usando a classe Calendar
-    public static Calendar converterParaCalendar(String data){
+    public static Calendar converterParaCalendar(String data) throws DataInvalidaException{
         SimpleDateFormat formatar = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
         //tratamento de exception do tipo: ParseException
@@ -171,9 +219,9 @@ public class MenuDeOpcoes {
             calendario.setTime(dataConvertida);
             return calendario;
         } catch (ParseException e) {
-            System.out.println("Formato de data ou Hora inválidos. Use dd/MM/yyyy HH:mm !");
+
+            throw new DataInvalidaException("Formato de data ou Hora inválidos. Use dd/MM/yyyy HH:mm !");
         }
-        return null;
         
     }
 
