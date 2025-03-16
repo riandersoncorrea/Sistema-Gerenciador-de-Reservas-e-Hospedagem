@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.Scanner;
 
 import Exceptions.DataInvalidaException;
-import Exceptions.ReservaNaoEncontradaException;
 import administrativo.Cliente;
 import hospedagens.Apartamento;
 import repositorio.RepositorioCliente;
@@ -26,7 +25,7 @@ public class MenuDeOpcoes {
     ServicosAdicionais servicosAdicionais = new PasseiosTuristicos();
     
 
-    public void iniciarMenu (){
+    public void iniciarMenu () {
         int opcao;
 
         //mostra o menu de opcoes no terminal
@@ -81,51 +80,65 @@ public class MenuDeOpcoes {
                         }
                         break;
                     } else if (respostaSubopcaoCase4 == 2){
-                        try {
-                            String idReserva = getString("ID da Reserva: ");
-                            Reserva reservaEncontrada = repositorioReservas.buscar(idReserva);
+                        String idReserva = getString("ID da Reserva: ");
+                        Reserva reservaEncontrada = repositorioReservas.buscar(idReserva);
+
+                        if(reservaEncontrada != null){
                             String idServico = getString("ID Serviço: ");
-                            reservaEncontrada.setIdServicosAdicionais(idServico); //atualiza o idServiço dentro da reserva encontrada
-                        
-                            //adicionar servico adicional na reserva
-                            boolean servicoConcluido = servicosAdicionais.reservar(reservaEncontrada);
-                            if (servicoConcluido){
-                                System.out.println("Serviço Adicioanl adicionado com sucesso.");
+                            try {
+                                boolean reservaConcluida = servicosAdicionais.reservar(reservaEncontrada, converterParaCalendar(getString("Data Incio: ")), converterParaCalendar(getString("Data Fim: ")), idServico);
+
+                                //adicionar serviço adicional na reserva
+                                if(reservaConcluida){
+                                    System.out.println("Serviço Adicional adicionado com sucesso.");
+                                } 
+
+                            } catch (DataInvalidaException e){
+                                System.out.println(e.getMessage());
                             }
-                            
-                        } catch (ReservaNaoEncontradaException e) {
-                            System.out.println(e.getMessage());
+                        } else {
+                            System.out.println("Serviço insdisponível o cliente não possui nenhuma reserva Ativa.");
                         }
-                        
-                    } 
+                    }
                     break;
                 
                 case 5:
                     int respostaSubopcaoCase5 = printReservaveis(Integer.parseInt(getString("opção: \n" + "[1] - Hospedagem \n" + "[2] - Serviços Adicionais\n" + "[0] - Voltar")));
 
                     if(respostaSubopcaoCase5 == 1){
-
                         try {
+                            
                             boolean disponibilidade = hospedagem.verificarDisponibilidade(getString("ID Hospedagem: "), converterParaCalendar(getString("Data e Hora de Check-in (dd/MM/yyyy): ")),converterParaCalendar((getString("Data e Hora de Check-out (dd/MM/yyyy HH:mm): "))));
 
                             if(disponibilidade){
                                 System.out.println("Data disponível para reserva.");
                             } else {
                                 System.out.println("Data Indisponível para reserva.");
-                            }
-                        } catch (DataInvalidaException e){
+                            } 
+                        } catch (DataInvalidaException e) {
                             System.out.println(e.getMessage());
                         }
 
                     } else if (respostaSubopcaoCase5 == 2){
                         //mostrar os servicos adicionais 
-                    }else {
-                      break;  
+                        try{
+                            boolean disponibilidade = servicosAdicionais.verificarDisponibilidade(getString("ID Serviço: "), converterParaCalendar(getString("Data e Hora de Check-in (dd/MM/yyyy): ")), converterParaCalendar(getString("Data e Hora de Check-out (dd/MM/yyyy HH:mm): ")));
+
+                            if(disponibilidade){
+                                System.out.println("Data disponível para reserva.");
+                            } else {
+                                System.out.println("Data Indisponível para reserva.");
+                            } 
+
+                        } catch (DataInvalidaException e){
+                            System.out.println(e.getMessage());
+                        }
                     }
+                    break;  
 
                 case 6: 
                     System.out.println(repositorioReservas.listar());
-
+                    break;
                 default:
                     break;
             }
@@ -153,7 +166,6 @@ public class MenuDeOpcoes {
 
    //imprime o menu de subopcoes com os IDs dos tipos de hospedagens e serviços adicionais, retorna boolean 
    public int printReservaveis(int subopcao){
-    
     switch (subopcao) {
         case 1: 
             System.out.println("==============Opções de Hospedagem==============\n" + 
@@ -217,7 +229,12 @@ public class MenuDeOpcoes {
             Date dataConvertida = formatar.parse(data);
             Calendar calendario = Calendar.getInstance();
             calendario.setTime(dataConvertida);
+
+            //zera os milissegundos
+            calendario.set(Calendar.MILLISECOND, 0);
+
             return calendario;
+
         } catch (ParseException e) {
 
             throw new DataInvalidaException("Formato de data ou Hora inválidos. Use dd/MM/yyyy HH:mm !");

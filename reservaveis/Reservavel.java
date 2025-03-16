@@ -10,4 +10,6 @@ public interface Reservavel {
     boolean reservar(Reserva reserva);
 
     void cancelarReserva(Reserva reserva, String motivo);
+
+
 }

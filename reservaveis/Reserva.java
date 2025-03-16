@@ -10,9 +10,11 @@ public class Reserva {
     private Cliente cliente;
     private int id;
     private String idHospedagem;
-    private String idServicosAdicionais;
+    private String idServicosAdicionais = "";
     private ItemHospedagem itemReservado; // Enum para o tipo de hospedagem
     private ItemServicosAdicionais itemServicosAdicionais; //Enum para o tipo de servicos adicionais
+    private Calendar dataInicioServico;
+    private Calendar dataFimServico;
     private Calendar dataCheckIn;
     private Calendar dataCheckOut;
     private StatusReserva status; //é uma variável do tipo StatusReserva(Enum) com as opções do status
@@ -61,7 +63,7 @@ public class Reserva {
     }
 
     public void setIdServicosAdicionais(String idServicosAdicionais) {
-        this.idServicosAdicionais = idServicosAdicionais;
+        this.idServicosAdicionais = (idServicosAdicionais != null) ? idServicosAdicionais : ""; 
     }
 
     public Calendar getDataCheckIn() {
@@ -105,6 +107,23 @@ public class Reserva {
         this.itemServicosAdicionais = itemServicosAdicionais;
     }
 
+    
+    public Calendar getDataInicioServico() {
+        return dataInicioServico;
+    }
+
+    public void setDataInicioServico(Calendar dataInicioServico) {
+        this.dataInicioServico = dataInicioServico;
+    }
+
+    public Calendar getDataFimServico() {
+        return dataFimServico;
+    }
+
+    public void setDataFimServico(Calendar dataFimServico) {
+        this.dataFimServico = dataFimServico;
+    }
+
     public void cancelarReserva (StatusReserva status){
         //altera o status da reserva para cancelada
         this.status = StatusReserva.CANCELADA;
@@ -117,8 +136,8 @@ public class Reserva {
         return "Reservas {\n" +
             "  ID Reserva: " + id + ",\n" +
             "  Cliente: " + cliente + ",\n" +
-            "  Tipo Hospedagem: " + idHospedagem + " - " + itemReservado + "\n" +
-            "  Serviço Adicional: " + idServicosAdicionais + " - " + itemServicosAdicionais + "\n" +
+            "  Tipo Hospedagem: " + idHospedagem + "-" + itemReservado + "\n" +
+            "  Serviço Adicional: " + idServicosAdicionais + " - " + itemServicosAdicionais + "(" + formatarDataHora.format(dataInicioServico.getTime()) + "-" + formatarDataHora.format(dataFimServico.getTime()) + ")"+ "\n" +
             "  Data Check-in: " +  formatarDataHora.format(dataCheckIn.getTime()) + "\n" +
             "  Data Check-out: " + formatarDataHora.format(dataCheckOut.getTime()) + "\n" +
             "  Status Reserva: " + status + "\n" +

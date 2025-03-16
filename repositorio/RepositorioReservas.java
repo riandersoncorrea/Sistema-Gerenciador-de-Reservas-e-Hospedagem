@@ -2,8 +2,8 @@ package repositorio;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-import Exceptions.ReservaNaoEncontradaException;
 import reservaveis.Reserva;
 
 public class RepositorioReservas implements Repositorio<Reserva>{
@@ -29,21 +29,40 @@ public class RepositorioReservas implements Repositorio<Reserva>{
     }
 
     @Override
-    public Reserva buscar(String id) throws ReservaNaoEncontradaException {
+    public Reserva buscar(String id) {
         
         for (Reserva reserva : reservasBd){
             if (reserva.getId() == Integer.parseInt(id)){
                 return reserva; 
             } 
         }
-        
-        throw new ReservaNaoEncontradaException("Reserva não encontrada.");
+        return null;
+    }
+
+    public Reserva buscarHospedagem(String idHospedagem){
+        for (Reserva reserva : reservasBd){
+            if (reserva.getidHospedagem().equals(idHospedagem)){
+                return reserva; 
+            } 
+        }
+        return null;
+    }
+
+    public Reserva buscarServicoAdicional(String idServicoAdicionais) {
+        for (Reserva reserva : reservasBd){
+            //compara mesmo se um dos lados for null 
+            if (Objects.equals(reserva.getIdServicosAdicionais(),(idServicoAdicionais))){ 
+                return reserva; 
+            } 
+        }
+       return null;
     }
 
     @Override
     public List<Reserva> listar() {
         return new ArrayList<>(reservasBd);
     }
+
 
     
 

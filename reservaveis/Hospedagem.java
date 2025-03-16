@@ -1,9 +1,9 @@
 package reservaveis;
 import java.util.Calendar;
 
-import Exceptions.ReservaNaoEncontradaException;
 import repositorio.RepositorioCliente;
 import repositorio.RepositorioReservas;
+
 
 public abstract class Hospedagem implements Reservavel {
     private static int id = 1000; 
@@ -11,6 +11,7 @@ public abstract class Hospedagem implements Reservavel {
     private double precoPorDiaria;
     RepositorioReservas repositorioReservas = RepositorioReservas.getInstance();
     RepositorioCliente repositorioClientes = RepositorioCliente.getInstance();
+    
 
 
     public int getCapacidade() {
@@ -38,31 +39,23 @@ public abstract class Hospedagem implements Reservavel {
     @Override
     public boolean verificarDisponibilidade(String idHospedagem, Calendar dataCheckIn, Calendar dataCheckOut) {
 
-        try {
-            //cria-se uma variável para armazenar a busca no repositório da reserva existente com id fornecido
-            Reserva reservaExistente = repositorioReservas.buscar(idHospedagem);
+        //cria-se uma variável para armazenar a busca no repositório da reserva existente com id fornecido
+        Reserva reservaExistente = repositorioReservas.buscarHospedagem(idHospedagem);
+
             
-            //  verifica se há uma reserva no repositorio com o id 
-            if (reservaExistente != null){
-                //obtem as datas de checkin e checkout e armazenas nas variáveis
-                Calendar reservaCheckIn = reservaExistente.getDataCheckIn();
-                Calendar reservaCheckOut = reservaExistente.getDataCheckOut();
-                
-                //verificação para não sobrepor as datas
-                if ((dataCheckIn.before(reservaCheckOut) && dataCheckIn.after(reservaCheckIn)) ||
-                    (dataCheckOut.after(reservaCheckIn) && dataCheckOut.before(reservaCheckOut))){
-                    return false;
-                }
-                
-            } 
-            //retorna que a hospedagem está disponível
-            return true;
-        } catch (ReservaNaoEncontradaException e) {
-            System.out.println(e.getMessage());
+        //  verifica se há uma reserva no repositorio com o id 
+        if (reservaExistente != null){
+            //obtem as datas de checkin e checkout e armazenas nas variáveis
+            Calendar reservaCheckIn = reservaExistente.getDataCheckIn();
+            Calendar reservaCheckOut = reservaExistente.getDataCheckOut();
             
-        }
+            //verificação para não sobrepor as datas
+            if ((dataCheckIn.before(reservaCheckOut) && dataCheckOut.after(reservaCheckIn))){
+                return false;
+            }
+        } 
+        //retorna que a hospedagem está disponível
         return true;
-        
     }
 
     //(DUVIDA) vai no checkin a logica desse metodo? e aqui só ficaria a chamada do checkin? ou o contrário?
@@ -99,6 +92,8 @@ public abstract class Hospedagem implements Reservavel {
         // ...
 
     }
+
+   
     
     // os dias posso subtrair ou contar pelo checkin e checkout
     public abstract double calcularValorHospedagem (int dias);
