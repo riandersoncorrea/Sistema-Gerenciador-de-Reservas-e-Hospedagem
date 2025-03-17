@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.Scanner;
 
 import Exceptions.DataInvalidaException;
+import Exceptions.ReservaNaoEncontradaException;
+import Exceptions.ServicoNaoPermitidoException;
 import administrativo.Cliente;
 import hospedagens.Apartamento;
 import repositorio.RepositorioCliente;
@@ -85,6 +87,8 @@ public class MenuDeOpcoes {
 
                         if(reservaEncontrada != null){
                             String idServico = getString("ID Serviço: ");
+
+                            //tratamento das excessoes de data, reserva inexistente e impedimento de reservar servico add
                             try {
                                 boolean reservaConcluida = servicosAdicionais.reservar(reservaEncontrada, converterParaCalendar(getString("Data Incio: ")), converterParaCalendar(getString("Data Fim: ")), idServico);
 
@@ -94,6 +98,10 @@ public class MenuDeOpcoes {
                                 } 
 
                             } catch (DataInvalidaException e){
+                                System.out.println(e.getMessage());
+                            } catch (ServicoNaoPermitidoException e){
+                                System.out.println(e.getMessage());
+                            } catch (ReservaNaoEncontradaException e) {
                                 System.out.println(e.getMessage());
                             }
                         } else {
@@ -107,7 +115,6 @@ public class MenuDeOpcoes {
 
                     if(respostaSubopcaoCase5 == 1){
                         try {
-                            
                             boolean disponibilidade = hospedagem.verificarDisponibilidade(getString("ID Hospedagem: "), converterParaCalendar(getString("Data e Hora de Check-in (dd/MM/yyyy): ")),converterParaCalendar((getString("Data e Hora de Check-out (dd/MM/yyyy HH:mm): "))));
 
                             if(disponibilidade){
@@ -137,6 +144,15 @@ public class MenuDeOpcoes {
                     break;  
 
                 case 6: 
+                    int respostaSubopcaoCase6 = printReservaveis(Integer.parseInt(getString("opção: \n" + 
+                    "[1] - Hospedagem \n" + "[2] - Serviços Adicionais\n" + "[0] - Voltar")));
+
+                    if (respostaSubopcaoCase6 == 1){
+                        String idReserva = getString("ID da Reserva: ");
+                        Reserva reservaEncontrada = repositorioReservas.buscar(idReserva);
+                        hospedagem.cancelarReserva(reservaEncontrada, getString("motivo do cancelamento: "));
+                    }
+                    
                     System.out.println(repositorioReservas.listar());
                     break;
                 default:

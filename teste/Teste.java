@@ -4,10 +4,7 @@ import Exceptions.DataInvalidaException;
 import administrativo.Cliente;
 import administrativo.Funcionario;
 import hospedagens.Apartamento;
-import hospedagens.Quarto;
 import menu.MenuDeOpcoes;
-import repositorio.RepositorioCliente;
-import repositorio.RepositorioReservas;
 import reservaveis.Hospedagem;
 import reservaveis.Reserva;
 
@@ -15,8 +12,6 @@ public class Teste {
     @SuppressWarnings("static-access")
     public static void main(String[] args) {
     
-    RepositorioCliente repositorioCliente = RepositorioCliente.getInstance();
-    RepositorioReservas repositorioReservas = RepositorioReservas.getInstance();
     Hospedagem hospedagem = new Apartamento();
     
 

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import hospedagens.Apartamento;
+import reservaveis.Hospedagem;
 import reservaveis.Reserva;
 
 public class RepositorioReservas implements Repositorio<Reserva>{

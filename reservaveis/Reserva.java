@@ -3,8 +3,18 @@ package reservaveis;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
+import Exceptions.HospedagemIndisponivelException;
+import Exceptions.ServicoNaoPermitidoException;
 import administrativo.Cliente;
+import hospedagens.Apartamento;
+import hospedagens.Cabana;
+import hospedagens.Quarto;
+import servicos.Lavanderia;
+import servicos.PasseiosTuristicos;
+import servicos.ServicoNulo;
+import servicos.Transfer;
 
 public class Reserva {
     private Cliente cliente;
@@ -18,6 +28,8 @@ public class Reserva {
     private Calendar dataCheckIn;
     private Calendar dataCheckOut;
     private StatusReserva status; //é uma variável do tipo StatusReserva(Enum) com as opções do status
+    private StatusReserva statusServicoAdicional;
+
 
     //construtor
     public Reserva(Cliente cliente, String idHospedagem, Calendar dataCheckIn, Calendar dataCheckOut) {
@@ -30,6 +42,7 @@ public class Reserva {
         this.dataCheckIn = dataCheckIn;
         this.dataCheckOut = dataCheckOut;
         this.status = StatusReserva.NENHUM;
+        this.statusServicoAdicional = StatusReserva.NENHUM;
     }
     
     public Cliente getCliente() {
@@ -91,6 +104,15 @@ public class Reserva {
     }
 
     
+    
+    public StatusReserva getStatusServicoAdicional() {
+        return statusServicoAdicional;
+    }
+
+    public void setStatusServicoAdicional(StatusReserva statusServicoAdicional) {
+        this.statusServicoAdicional = statusServicoAdicional;
+    }
+
     public String getidHospedagem() {
         return idHospedagem;
     }
@@ -126,21 +148,108 @@ public class Reserva {
 
     public void cancelarReserva (StatusReserva status){
         //altera o status da reserva para cancelada
-        this.status = StatusReserva.CANCELADA;
+        this.status = StatusReserva.CANCELADO;
         
     } 
+
+    //calcula o total de dias
+    public static long totalDias(Reserva reserva){
+
+        long tempoCheckIn = reserva.getDataCheckIn().getTimeInMillis();
+        long tempoCheckOut = reserva.getDataCheckOut().getTimeInMillis();
+
+
+        return TimeUnit.MILLISECONDS.toDays(tempoCheckOut - tempoCheckIn);
+    }
+
+    //calcula o total de horas
+    public static long totalHora(Reserva reserva){
+
+        long horaInicial = reserva.getDataInicioServico().getTimeInMillis();
+        long horaFinal = reserva.getDataFimServico().getTimeInMillis();
+
+        return TimeUnit.MILLISECONDS.toHours(horaFinal - horaInicial);
+    }
 
     @Override
     public String toString() {
         SimpleDateFormat formatarDataHora = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+
+
+        Hospedagem hospedagem;
+        ServicosAdicionais servicosAdicionais;
+        double valorReserva = 0.0;
+        double valorServicoAdicional = 0.0;
+
+        // trata exception se caso a opcao de hospedagem for indisponível
+        try {
+            hospedagem = criarHospedagemPorTipo();
+            valorReserva = hospedagem.calcularValorHospedagem(this);
+        } catch (HospedagemIndisponivelException e) {
+           System.out.println("Erro ao criar Hospedagem: " + e.getMessage());
+        }
+        
+        // trata exception se caso a opcao de serviço adicional for indisponível
+        try {
+            servicosAdicionais = criarServicosAdicionaisPorTipo();
+            valorServicoAdicional = servicosAdicionais.calcularValorServicos(this);
+        } catch (ServicoNaoPermitidoException e){
+            System.out.println("Erro ao criar Serviço Adicional: " + e.getMessage());
+             valorServicoAdicional = 0.0;
+        }
+
+        //caso as datas de inicio e fim do servico adicional sejam nulas, evita deixar nula e mostra uma string de nao definido
+        String dataInicioServicoStr = (dataInicioServico != null) ? formatarDataHora.format(dataInicioServico.getTime()) : "Não Definido";
+        String dataFimServicoStr = (dataFimServico != null) ? formatarDataHora.format(dataFimServico.getTime()) : "Não Definido";
+        
         return "Reservas {\n" +
             "  ID Reserva: " + id + ",\n" +
             "  Cliente: " + cliente + ",\n" +
+            "  Status Reserva: " + status + "\n" +
             "  Tipo Hospedagem: " + idHospedagem + "-" + itemReservado + "\n" +
-            "  Serviço Adicional: " + idServicosAdicionais + " - " + itemServicosAdicionais + "(" + formatarDataHora.format(dataInicioServico.getTime()) + "-" + formatarDataHora.format(dataFimServico.getTime()) + ")"+ "\n" +
+            "  Status Serviços Adicionais: " + statusServicoAdicional + "\n" +
+            "  Serviço Adicional: " + idServicosAdicionais + " - " + itemServicosAdicionais + "(" + dataInicioServicoStr + "-" + dataFimServicoStr + ")"+ "\n" +
             "  Data Check-in: " +  formatarDataHora.format(dataCheckIn.getTime()) + "\n" +
             "  Data Check-out: " + formatarDataHora.format(dataCheckOut.getTime()) + "\n" +
-            "  Status Reserva: " + status + "\n" +
+            "  Valor Reserva: R$ " + String.format("%.2f", valorReserva) + "\n" +
+            "  Valor Serviço Adicional: R$ " + String.format("%.2f", valorServicoAdicional) + "\n" +
+            "  Valor Total: R$ " + String.format("%.2f", valorReserva + valorServicoAdicional) + "\n" +
             "}";
+    }
+
+    //método para criar uma instacia do tipo de hospedagem 
+    private Hospedagem criarHospedagemPorTipo () throws HospedagemIndisponivelException{
+        switch (itemReservado) {
+            case APARTAMENTO:
+                return new Apartamento();
+            case QUARTO:
+                return new Quarto(idHospedagem, id);
+            case CABANA:
+                return new Cabana(idHospedagem, id);
+        
+            default:
+                throw new HospedagemIndisponivelException ("Tipo de hospedagem Indisponível");
+        }
+    }
+
+    //método para criar uma instacia do tipo de Serviço 
+    private ServicosAdicionais criarServicosAdicionaisPorTipo () throws ServicoNaoPermitidoException{
+
+        if(itemServicosAdicionais == ItemServicosAdicionais.NENHUM){
+            //caso nao tenha contratado serviço adicional retorna o valor 0.0
+            return new ServicoNulo();
+        }
+
+        switch (itemServicosAdicionais) {
+            case PASSEIO:
+                return new PasseiosTuristicos();
+            case LAVANDERIA:
+                return new Lavanderia();
+            case TRANSFER:
+                return new Transfer();
+
+            default:    
+                throw new ServicoNaoPermitidoException("Tipo de Serviço Adicional Indisponível");
+        }
     }
 }

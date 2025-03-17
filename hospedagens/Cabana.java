@@ -1,6 +1,7 @@
 package hospedagens;
 
 import reservaveis.Hospedagem;
+import reservaveis.Reserva;
 
 public class Cabana extends Hospedagem {
 
@@ -9,8 +10,9 @@ public class Cabana extends Hospedagem {
     }
 
     @Override
-    public double calcularValorHospedagem(int dias) {
-        // retorna o calulo. Podemos implementar alguma condicao para o calculo...
+    public double calcularValorHospedagem(Reserva reserva) {
+        long dias = Reserva.totalDias(reserva);
+       
         setPrecoPorDiaria(350);
         return getPrecoPorDiaria() * dias;
     }
