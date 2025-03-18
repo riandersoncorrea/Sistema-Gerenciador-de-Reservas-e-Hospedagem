@@ -34,11 +34,13 @@ public class Cliente {
 
     @Override
     public String toString() {
-        return "Cliente {\n" +
-            "  Nome: " + nome + ",\n" +
-            "  CPF: " + cpf + ",\n" +
-            "  Telefone: " + telefone + "\n" +
-            "}";
+        return "Cliente\n" +
+       "=========\n" +
+       "Nome:         " + nome + "\n" +
+       "CPF:          " + cpf + "\n" +
+       "Telefone:     " + telefone + "\n" +
+       "=========\n";
+
     }
 
 

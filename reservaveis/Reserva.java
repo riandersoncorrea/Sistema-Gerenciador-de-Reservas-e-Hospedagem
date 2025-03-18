@@ -214,19 +214,21 @@ public class Reserva {
         String dataInicioServicoStr = (dataInicioServico != null) ? formatarDataHora.format(dataInicioServico.getTime()) : "Não Definido";
         String dataFimServicoStr = (dataFimServico != null) ? formatarDataHora.format(dataFimServico.getTime()) : "Não Definido";
         
-        return "Reservas {\n" +
-            "  ID Reserva: " + id + ",\n" +
-            "  Cliente: " + cliente + ",\n" +
-            "  Status Reserva: " + status + "\n" +
-            "  Tipo Hospedagem: " + idHospedagem + "-" + itemReservado + "\n" +
-            "  Status Serviços Adicionais: " + statusServicoAdicional + "\n" +
-            "  Serviço Adicional: " + idServicosAdicionais + " - " + itemServicosAdicionais + "(" + dataInicioServicoStr + "-" + dataFimServicoStr + ")"+ "\n" +
-            "  Data Check-in: " +  formatarDataHora.format(dataCheckIn.getTime()) + "\n" +
-            "  Data Check-out: " + formatarDataHora.format(dataCheckOut.getTime()) + "\n" +
-            "  Valor Reserva: R$ " + String.format("%.2f", valorReserva) + "\n" +
-            "  Valor Serviço Adicional: R$ " + String.format("%.2f", valorServicoAdicional) + "\n" +
-            "  Valor Total: R$ " + String.format("%.2f", valorReserva + valorServicoAdicional) + "\n" +
-            "}";
+        return "Reserva de Hospedagem\n" +
+                "=====================\n" +
+                "ID Reserva:                 " + id + "\n" +
+                "Cliente:                    " + cliente + "\n" +
+                "Status da Reserva:          " + status + "\n" +
+                "Tipo de Hospedagem:         " + idHospedagem + " - " + itemReservado + "\n" +
+                "Status de Serviços Adicionais: " + statusServicoAdicional + "\n" +
+                "Serviço Adicional:          " + idServicosAdicionais + " - " + itemServicosAdicionais + " (" + dataInicioServicoStr + " - " + dataFimServicoStr + ")\n" +
+                "Data de Check-in:           " + formatarDataHora.format(dataCheckIn.getTime()) + "\n" +
+                "Data de Check-out:          " + formatarDataHora.format(dataCheckOut.getTime()) + "\n" +
+                "Valor da Reserva:           R$ " + String.format("%.2f", valorReserva) + "\n" +
+                "Valor do Serviço Adicional: R$ " + String.format("%.2f", valorServicoAdicional) + "\n" +
+                "Valor Total:                R$ " + String.format("%.2f", valorReserva + valorServicoAdicional) + "\n" +
+                "=====================\n";
+
     }
 
     //método para criar uma instacia do tipo de hospedagem 
