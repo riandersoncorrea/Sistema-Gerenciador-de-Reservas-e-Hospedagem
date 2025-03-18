@@ -60,9 +60,7 @@ public class Funcionario {
         
     }
 
-    public void realizarCheckOut() {
-
-    }
+    
 
     @Override
     public String toString() {

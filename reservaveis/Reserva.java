@@ -35,16 +35,13 @@ public class Reserva {
     //construtor
     public Reserva(Cliente cliente, String idHospedagem, Calendar dataCheckIn, Calendar dataCheckOut) {
         this.cliente = cliente;
-        this.id = id;
         this.idHospedagem = idHospedagem;
         this.itemReservado = ItemHospedagem.NENHUM;
-        this.idServicosAdicionais = idServicosAdicionais;
         this.itemServicosAdicionais = ItemServicosAdicionais.NENHUM;
         this.dataCheckIn = dataCheckIn;
         this.dataCheckOut = dataCheckOut;
         this.status = StatusReserva.NENHUM;
         this.statusServicoAdicional = StatusReserva.NENHUM;
-        this.motivosCancelamento = motivosCancelamento;
     }
     
     public Cliente getCliente() {
@@ -114,8 +111,6 @@ public class Reserva {
         this.status = status;
     }
 
-
-    
     
     public StatusReserva getStatusServicoAdicional() {
         return statusServicoAdicional;
@@ -164,6 +159,10 @@ public class Reserva {
         this.status = StatusReserva.CANCELADO;
         
     } 
+
+    public void realizarCheckOut() {
+        setStatusReserva(StatusReserva.FINALIZADO);
+    }
 
     //calcula o total de dias
     public static long totalDias(Reserva reserva){

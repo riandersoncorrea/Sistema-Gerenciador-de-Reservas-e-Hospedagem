@@ -105,7 +105,7 @@ public abstract class Hospedagem implements Reservavel {
     public void cancelarReserva(Reserva reserva, String motivo) throws ReservaNaoEncontradaException{
         
         reserva.setStatusReserva(StatusReserva.CANCELADO);
-        setMotivoCancelamento(motivo);
+        reserva.setMotivosCancelamento(motivo);
 
         if (reserva.getStatusServicoAdicional().equals(StatusReserva.ATIVO)){
            //chamar cancelar serviço

@@ -45,7 +45,7 @@ public abstract class ServicosAdicionais implements Reservavel {
     @Override
     public void cancelarReserva(Reserva reserva, String motivo) {
         reserva.setStatusServicoAdicional(StatusReserva.CANCELADO);
-        setMotivoCancelamento(motivo);
+        reserva.setMotivosCancelamento(motivo);
     }
 
     

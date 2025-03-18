@@ -195,13 +195,15 @@ public class MenuDeOpcoes {
                         case 1:
                             //tratamento de exception caso o usuário informe uma reserva inválida
                             
-                                String idReserva = getString("ID da Reserva: ");
-                                try {
+                            String idReserva = getString("ID da Reserva: ");
+                            try {
                                 Reserva reservaEncontrada = repositorioReservas.buscar(idReserva);
 
                                 if (reservaEncontrada != null){
                                     hospedagem.cancelarReserva(reservaEncontrada, getString("motivo do cancelamento: "));
                                 }
+                                System.out.println("Reserva cancelada com sucesso.");
+                                
                         
                             }
                             catch (ReservaNaoEncontradaException e){
@@ -209,14 +211,38 @@ public class MenuDeOpcoes {
                             }
                             break;
 
-                            case 2: 
+                        case 2: 
+                            String reserva = getString("ID da Reserva: ");
+                            try {
+                                Reserva reservaEncontrada = repositorioReservas.buscar(reserva);
 
-                                break;
+                                if (reservaEncontrada != null){
+                                    servicosAdicionais.cancelarReserva(reservaEncontrada, "motivo do cancelamento: ");
+                                }
+                                System.out.println("Serviço adicional cancelado com sucesso.");
+                            } catch (ReservaNaoEncontradaException e){
+                                System.out.println(e.getMessage());
+                            }
+                            break;
                             
                             
                         default:
                             break;
                     }
+                case 8: 
+                    String reserva = getString("ID da Reserva: ");
+                    try {
+                        Reserva reservaEncontrada = repositorioReservas.buscar(reserva);
+
+                        if (reservaEncontrada != null){
+                            reservaEncontrada.realizarCheckOut();
+                            System.out.println(reservaEncontrada.toString()); 
+                        }
+                        System.out.println("Check-out realizado.");
+                    } catch (ReservaNaoEncontradaException e){
+                        System.out.println(e.getMessage());
+                    }
+                    break;
                 case 9:
                     int respostaSubopcaoCase9 = Integer.parseInt(getString("opção: \n" + "[1] - Relatório de Reservas Ativas \n" + "[2] - Relatório de Cancelamentos\n" + "[3] - Histórico de Cliente"));
 
