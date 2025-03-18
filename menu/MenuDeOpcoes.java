@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Scanner;
 
+import Exceptions.CheckInInvalidoException;
 import Exceptions.DataInvalidaException;
 import Exceptions.ReservaNaoEncontradaException;
 import Exceptions.ServicoNaoPermitidoException;
@@ -193,6 +194,7 @@ public class MenuDeOpcoes {
                             break;  
 
                     case 6: 
+                            
                             int respostaSubopcaoCase6 = Integer.parseInt(getString("opção: \n" + "[1] - Hospedagem \n" + "[2] - Serviços Adicionais\n" + "[0] - Voltar\n\n" + ">> Sua Escolha: "));
 
                             switch (respostaSubopcaoCase6) {
@@ -206,13 +208,11 @@ public class MenuDeOpcoes {
                                         if (reservaEncontrada != null){
                                             hospedagem.cancelarReserva(reservaEncontrada, getString("motivo do cancelamento: "));
                                         }
-                                        System.out.println("Reserva cancelada com sucesso.");
                                         
-                                
                                     }
                                     catch (ReservaNaoEncontradaException e){
                                         System.out.println(e.getMessage());
-                                    }
+                                    } 
                                     break;
 
                                 case 2: 
@@ -223,7 +223,7 @@ public class MenuDeOpcoes {
                                         if (reservaEncontrada != null){
                                             servicosAdicionais.cancelarReserva(reservaEncontrada, "motivo do cancelamento: ");
                                         }
-                                        System.out.println("Serviço adicional cancelado com sucesso.");
+                                        System.out.println("Serviço adicional cancelado com sucesso");
                                     } catch (ReservaNaoEncontradaException e){
                                         System.out.println(e.getMessage());
                                     }
@@ -231,18 +231,45 @@ public class MenuDeOpcoes {
                                     
                                     
                                 default:
+                                    System.out.println("Opção inválida, tente novamente.");
+                                    respostaSubopcaoCase6 = Integer.parseInt(getString("opção: \n" + "[1] - Hospedagem \n" + "[2] - Serviços Adicionais\n" + "[0] - Voltar\n\n" + ">> Sua Escolha: "));
                                     break;
                             }
-                    case 8: 
-                            String reserva = getString("ID da Reserva: ");
-                            try {
-                                Reserva reservaEncontrada = repositorioReservas.buscar(reserva);
+                        break;
+                    case 7: 
+                        String reservaParaCheckin = getString("ID da Reserva: ");
+                        try {
+                            Reserva reservaEncontrada = repositorioReservas.buscar(reservaParaCheckin);
 
-                                if (reservaEncontrada != null){
-                                    reservaEncontrada.realizarCheckOut();
+                            if (reservaEncontrada != null){
+                                try { 
+                                    reservaEncontrada.realizarCheckIn(reservaEncontrada);
+                                    System.out.println("Check-in realizado com sucesso.");
                                     System.out.println(reservaEncontrada.toString()); 
+
+                                } catch (CheckInInvalidoException e){
+                                    System.out.println(e.getMessage());
                                 }
-                                System.out.println("Check-out realizado.");
+                            }
+                            
+                        } catch (ReservaNaoEncontradaException e){
+                            System.out.println(e.getMessage());
+                        }
+                        break;
+                    case 8: 
+                            String reservaParaCheckOut = getString("ID da Reserva: ");
+                            try {
+                                Reserva reservaEncontrada = repositorioReservas.buscar(reservaParaCheckOut);
+                                try {
+                                    if (reservaEncontrada != null){
+                                        reservaEncontrada.realizarCheckOut(reservaEncontrada);
+                                        System.out.println("Check-out realizado com sucesso.");
+                                        System.out.println(reservaEncontrada.toString());    
+                                    }
+                                   
+                                } catch (Exception e){
+                                    System.out.println(e.getMessage());
+                                }
                             } catch (ReservaNaoEncontradaException e){
                                 System.out.println(e.getMessage());
                             }

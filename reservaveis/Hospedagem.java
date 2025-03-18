@@ -103,15 +103,25 @@ public abstract class Hospedagem implements Reservavel {
 
     @Override
     public void cancelarReserva(Reserva reserva, String motivo) throws ReservaNaoEncontradaException{
-        
-        reserva.setStatusReserva(StatusReserva.CANCELADO);
-        reserva.setMotivosCancelamento(motivo);
+        try {
+            boolean cancelamentoPermitido = reserva.cancelarReserva(reserva);
 
-        if (reserva.getStatusServicoAdicional().equals(StatusReserva.ATIVO)){
-           //chamar cancelar serviço
-          servicoAdicional.cancelarReserva(reserva, motivo);
+            if(cancelamentoPermitido){
+                reserva.setStatusReserva(StatusReserva.CANCELADO);
+                reserva.setMotivosCancelamento(motivo);
+
+                if (reserva.getStatusServicoAdicional().equals(StatusReserva.ATIVO)){
+                    //chamar cancelar serviço
+                    servicoAdicional.cancelarReserva(reserva, motivo);
+                    System.out.println("Reserva cancelada com sucesso.");
+                }
+                throw new ReservaNaoEncontradaException("Reserva não encontrada. Insira um id válido!");
+            }
+        } catch (Exception e){
+            System.out.println(e.getMessage());
         }
-        throw new ReservaNaoEncontradaException("Reserva não encontrada. Insira um id válido!");
+        
+        
     }
 
    

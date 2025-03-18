@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
+import Exceptions.CheckInInvalidoException;
 import Exceptions.HospedagemIndisponivelException;
 import Exceptions.ServicoNaoPermitidoException;
 import administrativo.Cliente;
@@ -154,14 +155,56 @@ public class Reserva {
     }
 
     //metodos
-    public void cancelarReserva (StatusReserva status){
-        //altera o status da reserva para cancelada
-        this.status = StatusReserva.CANCELADO;
+    public boolean cancelarReserva (Reserva reserva) throws Exception{
+
+        Calendar agora = Calendar.getInstance(); // pega o horário e data atual do dispositivo
+        Calendar checkIn = reserva.getDataCheckIn();
+
+        //estamos calculando o horario limite para cancelamento (a diferença de horario tem que ser no máximo 24 antes)
+        checkIn.add(Calendar.HOUR_OF_DAY, -24);
+
+        if (agora.before(checkIn)){
+            //altera o status da reserva para cancelada
+            return true;
+        } else {
+            throw new Exception("Cancelamento só é permitido com 24h de antecendência da data de Check-in.");
+        }
+        
         
     } 
 
-    public void realizarCheckOut() {
-        setStatusReserva(StatusReserva.FINALIZADO);
+    public void realizarCheckIn(Reserva reserva) throws CheckInInvalidoException{
+
+        Calendar agora = Calendar.getInstance(); 
+        Calendar checkInPermitido = (Calendar) reserva.getDataCheckIn();
+
+        checkInPermitido.set(Calendar.HOUR_OF_DAY, 14);
+        checkInPermitido.set(Calendar.MINUTE, 0);
+
+        
+        if (agora.after(checkInPermitido) && agora.get(Calendar.DAY_OF_YEAR)
+            == reserva.getDataCheckIn().get(Calendar.DAY_OF_YEAR)){
+            reserva.setStatusReserva(StatusReserva.ATIVO);
+        } else {
+            throw new CheckInInvalidoException("Check-in só é permito após às 14h.");
+        }
+    }
+
+
+    public void realizarCheckOut(Reserva reserva) throws Exception{
+
+        Calendar agora = Calendar.getInstance(); 
+        Calendar checkOutPermitido = (Calendar) reserva.getDataCheckOut();
+
+        checkOutPermitido.set(Calendar.HOUR_OF_DAY, 12);
+        checkOutPermitido.set(Calendar.MINUTE, 0);
+
+            if (agora.before(checkOutPermitido) && agora.get(Calendar.DAY_OF_YEAR)
+                == reserva.getDataCheckOut().get(Calendar.DAY_OF_YEAR)){
+                reserva.setStatusReserva(StatusReserva.FINALIZADO);
+            } else {
+                throw new Exception("Check-out atrasado. Sujeito a multa.");
+            }
     }
 
     //calcula o total de dias

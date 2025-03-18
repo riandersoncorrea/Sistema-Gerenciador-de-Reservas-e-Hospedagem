@@ -20,7 +20,7 @@ public class Teste {
     funcionario.cadastrarCliente(cliente);
     Reserva reserva;
     try {
-        reserva = new Reserva(cliente, "001", menu.converterParaCalendar("01/02/2026 14:00"), menu.converterParaCalendar("05/02/2026 12:00"));
+        reserva = new Reserva(cliente, "001", menu.converterParaCalendar("18/03/2025 14:00"), menu.converterParaCalendar("20/03/2025 12:00"));
         hospedagem.reservar(reserva);
     } catch (DataInvalidaException e) {
         e.printStackTrace();

@@ -55,13 +55,7 @@ public class Funcionario {
         funcionarioBd.adicionar(funcionario);
     }
 
-    //(DUVIDA) nao entendi o que fazer aqui, porque já temos um método de fazer reserva la em hospedagem.
-    public void realizarCheckIn() {
-        
-    }
-
-    
-
+   
     @Override
     public String toString() {
         return "Funcionário {\n" +
