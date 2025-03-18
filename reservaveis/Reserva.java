@@ -29,6 +29,7 @@ public class Reserva {
     private Calendar dataCheckOut;
     private StatusReserva status; //é uma variável do tipo StatusReserva(Enum) com as opções do status
     private StatusReserva statusServicoAdicional;
+    private String motivosCancelamento;
 
 
     //construtor
@@ -43,6 +44,7 @@ public class Reserva {
         this.dataCheckOut = dataCheckOut;
         this.status = StatusReserva.NENHUM;
         this.statusServicoAdicional = StatusReserva.NENHUM;
+        this.motivosCancelamento = motivosCancelamento;
     }
     
     public Cliente getCliente() {
@@ -71,6 +73,15 @@ public class Reserva {
     }
 
     
+    
+    public String getMotivosCancelamento() {
+        return motivosCancelamento;
+    }
+
+    public void setMotivosCancelamento(String motivosCancelamento) {
+        this.motivosCancelamento = motivosCancelamento;
+    }
+
     public String getIdServicosAdicionais() {
         return idServicosAdicionais;
     }
@@ -102,6 +113,7 @@ public class Reserva {
     public void setStatusReserva(StatusReserva status) {
         this.status = status;
     }
+
 
     
     
@@ -146,6 +158,7 @@ public class Reserva {
         this.dataFimServico = dataFimServico;
     }
 
+    //metodos
     public void cancelarReserva (StatusReserva status){
         //altera o status da reserva para cancelada
         this.status = StatusReserva.CANCELADO;
@@ -195,7 +208,7 @@ public class Reserva {
             valorServicoAdicional = servicosAdicionais.calcularValorServicos(this);
         } catch (ServicoNaoPermitidoException e){
             System.out.println("Erro ao criar Serviço Adicional: " + e.getMessage());
-             valorServicoAdicional = 0.0;
+            valorServicoAdicional = 0.0;
         }
 
         //caso as datas de inicio e fim do servico adicional sejam nulas, evita deixar nula e mostra uma string de nao definido

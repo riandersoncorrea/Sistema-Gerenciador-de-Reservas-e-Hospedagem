@@ -1,9 +1,10 @@
 package reservaveis;
 import java.util.Calendar;
 
-import hospedagens.Apartamento;
+import Exceptions.ReservaNaoEncontradaException;
 import repositorio.RepositorioCliente;
 import repositorio.RepositorioReservas;
+import servicos.Transfer;
 
 
 public abstract class Hospedagem implements Reservavel {
@@ -13,7 +14,7 @@ public abstract class Hospedagem implements Reservavel {
     private String motivoCancelamento;
     RepositorioReservas repositorioReservas = RepositorioReservas.getInstance();
     RepositorioCliente repositorioClientes = RepositorioCliente.getInstance();
-    
+    ServicosAdicionais servicoAdicional = new Transfer();
 
 
     public int getCapacidade() {
@@ -101,14 +102,16 @@ public abstract class Hospedagem implements Reservavel {
     }   
 
     @Override
-    public void cancelarReserva(Reserva reserva, String motivo) {
+    public void cancelarReserva(Reserva reserva, String motivo) throws ReservaNaoEncontradaException{
+        
         reserva.setStatusReserva(StatusReserva.CANCELADO);
         setMotivoCancelamento(motivo);
 
         if (reserva.getStatusServicoAdicional().equals(StatusReserva.ATIVO)){
            //chamar cancelar serviço
-            
+          servicoAdicional.cancelarReserva(reserva, motivo);
         }
+        throw new ReservaNaoEncontradaException("Reserva não encontrada. Insira um id válido!");
     }
 
    

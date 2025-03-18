@@ -64,10 +64,6 @@ public class Funcionario {
 
     }
 
-    public void gerarRelatorio() {
-
-    }
-
     @Override
     public String toString() {
         return "Funcionário {\n" +

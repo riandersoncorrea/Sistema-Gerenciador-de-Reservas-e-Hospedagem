@@ -99,7 +99,7 @@ public abstract class ServicosAdicionais implements Reservavel {
                     return false;
                 }
             }
-        return true;
+            return true;
     }
 
     public abstract double calcularValorServicos(Reserva reserva);

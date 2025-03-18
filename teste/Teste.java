@@ -13,7 +13,6 @@ public class Teste {
     public static void main(String[] args) {
     
     Hospedagem hospedagem = new Apartamento();
-    
 
     MenuDeOpcoes menu = new MenuDeOpcoes();
     Funcionario funcionario = new Funcionario("123", "José", "admin");

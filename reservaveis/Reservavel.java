@@ -2,6 +2,8 @@ package reservaveis;
 
 import java.util.Calendar;
 
+import Exceptions.ReservaNaoEncontradaException;
+
 public interface Reservavel {
 
 
@@ -9,7 +11,7 @@ public interface Reservavel {
 
     boolean reservar(Reserva reserva);
 
-    void cancelarReserva(Reserva reserva, String motivo);
+    void cancelarReserva(Reserva reserva, String motivo) throws ReservaNaoEncontradaException;
 
 
 }

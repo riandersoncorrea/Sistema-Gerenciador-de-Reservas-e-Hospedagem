@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import Exceptions.ReservaNaoEncontradaException;
 import hospedagens.Apartamento;
 import reservaveis.Hospedagem;
 import reservaveis.Reserva;
@@ -31,14 +32,14 @@ public class RepositorioReservas implements Repositorio<Reserva>{
     }
 
     @Override
-    public Reserva buscar(String id) {
+    public Reserva buscar(String id) throws ReservaNaoEncontradaException {
         
         for (Reserva reserva : reservasBd){
             if (reserva.getId() == Integer.parseInt(id)){
                 return reserva; 
             } 
         }
-        return null;
+        throw new ReservaNaoEncontradaException("Reserva com ID " + id + " não encontrado.");
     }
 
     public Reserva buscarHospedagem(String idHospedagem){
